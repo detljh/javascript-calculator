@@ -1,6 +1,5 @@
 import Creators from './actions.js';
 
-const OPERATORS = ['+', '-', '*', '/'];
 const precedence = {
     "/": 2,
     "*": 2,
@@ -36,18 +35,18 @@ const handleDecimal = () => {
 
             const newFormula = (isEvaluated || formula.length === 0) ? "0." : 
             // if decimal is preceded by operator 
-                OPERATORS.includes(formula[formula.length - 1]) ?
+                precedence.hasOwnProperty(formula[formula.length - 1]) ?
                 formula.concat("0.") :
                 formula.concat(".");
 
             const newDisplay = isEvaluated ? "0." : 
             // if prev input was operator remove operator from display and replace else join with number
-                OPERATORS.includes(display) ?
+                precedence.hasOwnProperty(display) ?
                 display.slice(0, -1).concat("0.") :
                 display.concat(".");
 
             // if prev input was operator add it to the queue
-            const newQueue = OPERATORS.includes(display) ? 
+            const newQueue = precedence.hasOwnProperty(display) ? 
                 [...outputQueue, display] :
                 outputQueue;
             
@@ -70,7 +69,7 @@ const evaluate = () => {
         const outputQueue = getState().home.outputQueue;
 
         // if prev input was operator ignore it
-        let expression = OPERATORS.includes(formula[formula.length - 1]) ? 
+        let expression = precedence.hasOwnProperty(formula[formula.length - 1]) ? 
             formula.slice(0, -1) :
             formula;
 
@@ -80,7 +79,7 @@ const evaluate = () => {
         
         for (var i = 0; i < outputQueue.length; i++) {
             let element = outputQueue[i]
-            if (OPERATORS.includes(element)) {
+            if (precedence.hasOwnProperty(element)) {
                 if (opStack.length > 0 && precedence[opStack[opStack.length - 1]] >= precedence[element]) {
                     let a = valueStack.pop();
                     let b = valueStack.pop();
@@ -101,7 +100,7 @@ const evaluate = () => {
             valueStack.push(evaluateOperator(op, a, b));
         }
 
-        // return expression if no operators
+        // return expression if no precedence
         const ans = valueStack.length === 0 ? expression : valueStack.pop().toString();
 
         dispatch(Creators.evaluate(ans, expression.concat(ans)));
@@ -118,12 +117,12 @@ const handleZero = () => {
         if (display !== "0" || formula !== "0") {
             const newFormula = (isEvaluated || formula.length === 0) ? "0" : formula.concat("0");
             // if display already starts with 0 leave it else add 0 to end 
-            const newDisplay = (isEvaluated || display === "0" || OPERATORS.includes(display)) ?
+            const newDisplay = (isEvaluated || display === "0" || precedence.hasOwnProperty(display)) ?
              "0" : 
              display.concat("0");
 
             // if prev input was operator, add to queue
-            const newQueue = OPERATORS.includes(display) ? 
+            const newQueue = precedence.hasOwnProperty(display) ? 
             [...outputQueue, display] :
             outputQueue;
 
@@ -140,10 +139,10 @@ const handleOperator = (value) => {
         const isEvaluated = getState().home.evaluated;
 
         // if prev input was number
-        const newQueue = !OPERATORS.includes(display) ?
+        const newQueue = !precedence.hasOwnProperty(display) ?
             // if its not the first number and there are two operands before it
             formula.length > 1 && formula[formula.length - display.length - 1] === "-" && 
-            OPERATORS.includes(formula[formula.length - display.length - 2]) ?
+            precedence.hasOwnProperty(formula[formula.length - display.length - 2]) ?
             // add negative number to queue
             [...outputQueue, "-".concat(display)] :
             [...outputQueue, display] :
@@ -155,18 +154,18 @@ const handleOperator = (value) => {
             // if formula has been evaluated continue it with the prev answer and new operator
             newFormula = getState().home.prevAns + value;
         } else {
-            // allow negative numbers by adding negative sign after other operators
+            // allow negative numbers by adding negative sign after other precedence
             // double negation disallowed
             if (value === "-" && formula[formula.length - 1] !== "-") {
                 newFormula = formula.concat(value);
             } else {
-                newFormula = OPERATORS.includes(formula[formula.length - 1]) ?
-                OPERATORS.includes(formula[formula.length - 2]) ?
-                // if there were two operators previously remove both and replace with current
+                newFormula = precedence.hasOwnProperty(formula[formula.length - 1]) ?
+                precedence.hasOwnProperty(formula[formula.length - 2]) ?
+                // if there were two precedence previously remove both and replace with current
                 formula.slice(0, -2).concat(value) :
                 // else remove the one operator and replace with current
                 formula.slice(0, -1).concat(value) :
-                // if no operators previously, add current
+                // if no precedence previously, add current
                 formula.concat(value);
             }
         }
@@ -189,7 +188,7 @@ const handleOperand = (value) => {
         // if previous evaluated start new display
         const newDisplay = isEvaluated ? value : 
             // if prev input was 0 or an operator, replace with current number
-            (display === "0" || OPERATORS.includes(display)) ? 
+            (display === "0" || precedence.hasOwnProperty(display)) ? 
             value : 
             // else concat number to display
             display.concat(value);
@@ -197,13 +196,13 @@ const handleOperand = (value) => {
         // previous evaluated or formula is 0 replace start new formula
         const newFormula = isEvaluated || formula === "0" ? value : 
         // if initially performing operation with 0, replace with new value
-        OPERATORS.includes(formula[formula.length - 2]) && formula[formula.length - 1] === "0" ?
+        precedence.hasOwnProperty(formula[formula.length - 2]) && formula[formula.length - 1] === "0" ?
         formula.slice(0, -1).concat(value) :
         formula.concat(value);
 
 
-        const newQueue = OPERATORS.includes(formula[formula.length - 1]) ?
-            OPERATORS.includes(formula[formula.length - 2]) ?
+        const newQueue = precedence.hasOwnProperty(formula[formula.length - 1]) ?
+            precedence.hasOwnProperty(formula[formula.length - 2]) ?
             // ignore negative sign if there is one and add the prev operator to queue
             [...outputQueue, formula[formula.length - 2]] :
             [...outputQueue, formula[formula.length - 1]] :
