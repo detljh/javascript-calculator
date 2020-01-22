@@ -1,0 +1,128 @@
+$icon-angle: 150deg;
+
+.icons {
+    font-size: 100px;
+    opacity: 0.3;
+    z-index: -1;
+    position: relative;
+
+    #minus-icon {
+        animation: rotate-icon;
+        animation-duration: 10s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        left: 50px;
+        color: pink;
+        position: absolute;
+    }
+
+    #plus-icon {
+        animation: rotate-icon;
+        animation-duration: 8s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        right: 70px;
+        top: 30px;
+        color: hsl(64, 100%, 74%);
+        position: absolute;
+    }
+
+    #divide-icon {
+        animation: rotate-icon;
+        animation-duration: 7s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        left: 150px;
+        top: 240px;
+        color: hsl(219, 100%, 74%);
+        position: absolute;
+    }
+
+    #equals-icon {
+        animation: rotate-icon;
+        animation-duration: 9s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        right: 40px;
+        top: 320px;
+        color: hsl(138, 100%, 74%);
+        position: absolute;
+    }
+
+    #not-equals-icon {
+        animation: rotate-icon;
+        animation-duration: 9.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        right: 430px;
+        top: -30px;
+        color: hsl(170, 100%, 74%);
+        position: absolute;
+    }
+
+    #wave-square-icon {
+        animation: rotate-icon;
+        animation-duration: 8.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        right: 265px;
+        top: 200px;
+        color: hsl(271, 100%, 74%);
+        position: absolute;
+    }
+    
+    #sqrt-icon {
+        animation: rotate-icon;
+        animation-duration: 8.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        left: 365px;
+        top: 50px;
+        color: hsl(0, 100%, 74%);
+        position: absolute;
+    }
+
+    #gt-icon {
+        animation: rotate-icon;
+        animation-duration: 8s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        right: 365px;
+        top: 400px;
+        color: hsl(39, 100%, 74%);
+        position: absolute;
+    }
+    
+    #lt-icon {
+        animation: rotate-icon;
+        animation-duration: 9.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        left: 465px;
+        top: 450px;
+        color: hsl(325, 100%, 74%);
+        position: absolute;
+    }
+
+    #subscript-icon {
+        animation: rotate-icon;
+        animation-duration: 10s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        left: -10px;
+        top: 470px;
+        color: hsl(14, 100%, 74%);
+        position: absolute;
+    }
+}
+
+@keyframes rotate-icon {
+    0% {
+        transform: rotate(0);
+    }
+
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

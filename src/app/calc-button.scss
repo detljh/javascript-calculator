@@ -1,0 +1,16 @@
+.calc-button {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-sizing: border-box;
+}
+
+
+.calc-button:hover {
+    color: orange;
+}

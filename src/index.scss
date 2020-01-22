@@ -1,0 +1,17 @@
+html, body {
+    margin: 0;
+    height: 100%;
+    padding: 0;
+    font-size: 20px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    
+
+    @media (max-height: 500px) {
+        overflow-y: scroll;
+    }
+
+    @media (max-width: 370px) {
+        overflow-x: scroll;
+    }
+}
