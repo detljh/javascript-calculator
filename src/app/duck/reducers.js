@@ -4,7 +4,6 @@ const INITIAL_STATE = {
     display: '0',
     formulaDisplay: '',
     outputQueue: [],
-    opStack: [],
     hasDecimal: false,
     evaluated: false,
     prevAns: ''
@@ -41,7 +40,6 @@ const homeReducer = (state=INITIAL_STATE, action) => {
                 evaluated: true,
                 hasDecimal: false,
                 outputQueue: [action.output],
-                opStack: [],
                 prevAns: action.output
             });
         case types.DECIMAL:

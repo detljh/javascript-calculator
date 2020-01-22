@@ -182,7 +182,7 @@ const handleOperand = (value) => {
         const display = getState().home.display;
         const outputQueue = getState().home.outputQueue;
 
-        if (display.length > 20) {
+        if (display.length > 15) {
             return;
         }
 
