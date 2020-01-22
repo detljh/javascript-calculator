@@ -5,9 +5,9 @@ import './calculator.scss';
 const CalculatorComponent = (props) => {
     return (
         <div id="calc-container">
-            <div id="display">
+            <div id="display-container">
                 <p id="formula">{props.formulaDisplay}</p>
-                <p id="input-display">{props.display}</p>
+                <p id="display">{props.display}</p>
             </div>
             <CalculatorButton id="equals" text="=" handleClick={props.evaluate} />
             <CalculatorButton id="zero" text="0" handleClick={props.handleZero}/>

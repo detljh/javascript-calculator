@@ -17,7 +17,7 @@ const homeReducer = (state=INITIAL_STATE, action) => {
                 display: action.display,
                 formulaDisplay: action.formula,
                 evaluated: false,
-                opStack: action.opStack
+                outputQueue: action.outputQueue
             })
         case types.OPERATOR:
             return Object.assign({}, state, {
@@ -32,7 +32,7 @@ const homeReducer = (state=INITIAL_STATE, action) => {
                 display: action.display,
                 formulaDisplay: action.formula,
                 evaluated: false,
-                opStack: action.opStack
+                outputQueue: action.outputQueue
             });
         case types.EVALUATE:
             return Object.assign({}, state, {
@@ -50,7 +50,7 @@ const homeReducer = (state=INITIAL_STATE, action) => {
                 display: action.display,
                 formulaDisplay: action.formula,
                 evaluated: false,
-                opStack: action.opStack
+                outputQueue: action.outputQueue
             });
         case types.CLEAR:
             return INITIAL_STATE;

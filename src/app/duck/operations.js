@@ -1,12 +1,33 @@
 import Creators from './actions.js';
 
 const OPERATORS = ['+', '-', '*', '/'];
+const precedence = {
+    "/": 2,
+    "*": 2,
+    "+": 1,
+    "-": 1
+};
+
 const clear = Creators.clear;
+
+const evaluateOperator = (op, a, b) => {
+    switch (op) {
+        case "-":
+            return b - a;
+        case "+":
+            return b + a;
+        case "*":
+            return b * a;
+        case "/":
+            return b / a;
+        default: return;
+    }
+}
 
 const handleDecimal = () => {
     return (dispatch, getState) => {
         const hasDecimal = getState().home.hasDecimal;
-        const opStack = getState().home.opStack;
+        const outputQueue = getState().home.outputQueue;
 
         if (!hasDecimal) {
             const isEvaluated = getState().home.evaluated;
@@ -25,12 +46,12 @@ const handleDecimal = () => {
                 display.slice(0, -1).concat("0.") :
                 display.concat(".");
 
-            // if prev input was operator add it to the stack
-            const newStack = OPERATORS.includes(display) ? 
-                [...opStack, display] :
-                opStack;
+            // if prev input was operator add it to the queue
+            const newQueue = OPERATORS.includes(display) ? 
+                [...outputQueue, display] :
+                outputQueue;
             
-            dispatch(Creators.handleDecimal(newFormula, newDisplay, newStack));
+            dispatch(Creators.handleDecimal(newFormula, newDisplay, newQueue));
         }
     };
 }
@@ -47,45 +68,41 @@ const evaluate = () => {
 
         const formula = getState().home.formulaDisplay;
         const outputQueue = getState().home.outputQueue;
-        const opStack = getState().home.opStack;
 
         // if prev input was operator ignore it
         let expression = OPERATORS.includes(formula[formula.length - 1]) ? 
             formula.slice(0, -1) :
             formula;
 
-        // using shunting yard algorithm to construct post fix expression
-        const totalOps = outputQueue.concat(opStack.reverse());
-        const output = [];
+        // infix evaluation
+        const opStack = [];
+        const valueStack = [];
         
-        for (var i = 0; i < totalOps.length; i++) {
-            let element = totalOps[i]
+        for (var i = 0; i < outputQueue.length; i++) {
+            let element = outputQueue[i]
             if (OPERATORS.includes(element)) {
-                const a = output.pop();
-                const b = output.pop();
+                if (opStack.length > 0 && precedence[opStack[opStack.length - 1]] >= precedence[element]) {
+                    let a = valueStack.pop();
+                    let b = valueStack.pop();
+                    let op = opStack.pop();
 
-                switch (element) {
-                    case "-":
-                        output.push(b - a);
-                        break;
-                    case "+":
-                        output.push(b + a);
-                        break;
-                    case "*":
-                        output.push(b * a);
-                        break;
-                    case "/":
-                        output.push(b / a);
-                        break;
-                    default: break;
+                    valueStack.push(evaluateOperator(op, a, b));
                 }
+                opStack.push(element);
             } else {
-                output.push(Number(element));
+                valueStack.push(Number(element));
             }
         }
 
+        while (opStack.length > 0) {
+            let op = opStack.pop();
+            let a = valueStack.pop();
+            let b = valueStack.pop();
+            valueStack.push(evaluateOperator(op, a, b));
+        }
+
         // return expression if no operators
-        const ans = output.length === 0 ? expression : output.pop().toString();
+        const ans = valueStack.length === 0 ? expression : valueStack.pop().toString();
 
         dispatch(Creators.evaluate(ans, expression.concat(ans)));
     };
@@ -95,7 +112,7 @@ const handleZero = () => {
     return (dispatch, getState) => {
         const display = getState().home.display;
         const formula = getState().home.formulaDisplay;
-        const opStack = getState().home.opStack;
+        const outputQueue = getState().home.outputQueue;
         const isEvaluated = getState().home.evaluated;
         
         if (display !== "0" || formula !== "0") {
@@ -105,12 +122,12 @@ const handleZero = () => {
              "0" : 
              display.concat("0");
 
-            // if prev input was operator, add to stack
-            const newStack = OPERATORS.includes(display) ? 
-            [...opStack, display] :
-            opStack;
+            // if prev input was operator, add to queue
+            const newQueue = OPERATORS.includes(display) ? 
+            [...outputQueue, display] :
+            outputQueue;
 
-            dispatch(Creators.handleZero(newDisplay, newFormula, newStack));
+            dispatch(Creators.handleZero(newDisplay, newFormula, newQueue));
         }
     };
 }
@@ -163,7 +180,7 @@ const handleOperand = (value) => {
         const isEvaluated = getState().home.evaluated;
         const formula = getState().home.formulaDisplay;
         const display = getState().home.display;
-        const opStack = getState().home.opStack;
+        const outputQueue = getState().home.outputQueue;
 
         if (display.length > 20) {
             return;
@@ -185,14 +202,14 @@ const handleOperand = (value) => {
         formula.concat(value);
 
 
-        const newStack = OPERATORS.includes(formula[formula.length - 1]) ?
+        const newQueue = OPERATORS.includes(formula[formula.length - 1]) ?
             OPERATORS.includes(formula[formula.length - 2]) ?
-            // ignore negative sign if there is one and add the prev operator to stack
-            [...opStack, formula[formula.length - 2]] :
-            [...opStack, formula[formula.length - 1]] :
-            opStack;
+            // ignore negative sign if there is one and add the prev operator to queue
+            [...outputQueue, formula[formula.length - 2]] :
+            [...outputQueue, formula[formula.length - 1]] :
+            outputQueue;
 
-        dispatch(Creators.handleOperand(newDisplay, newFormula, newStack));
+        dispatch(Creators.handleOperand(newDisplay, newFormula, newQueue));
     };
 }
 

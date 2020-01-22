@@ -9,21 +9,21 @@ const handleOperator = (value, formula, outputQueue) => {
     };
 }
 
-const handleOperand = (display, formula, opStack) => {
+const handleOperand = (display, formula, outputQueue) => {
     return {
         type: types.OPERAND,
         display: display,
         formula: formula,
-        opStack: opStack
+        outputQueue: outputQueue
     };
 }
 
-const handleZero = (display, formula, opStack) => {
+const handleZero = (display, formula, outputQueue) => {
     return {
         type: types.ZERO,
         formula: formula,
         display: display,
-        opStack: opStack
+        outputQueue: outputQueue
     };
 }
 
@@ -35,12 +35,12 @@ const evaluate = (output, formula) => {
     };
 }
 
-const handleDecimal = (formula, display, opStack) => {
+const handleDecimal = (formula, display, outputQueue) => {
     return {
         type: types.DECIMAL,
         formula: formula,
         display: display,
-        opStack: opStack
+        outputQueue: outputQueue
     };
 }
 
