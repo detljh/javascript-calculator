@@ -76,7 +76,6 @@ const evaluate = () => {
         // infix evaluation
         const opStack = [];
         const valueStack = [];
-        
         for (var i = 0; i < outputQueue.length; i++) {
             let element = outputQueue[i]
             if (precedence.hasOwnProperty(element)) {
@@ -181,7 +180,7 @@ const handleOperand = (value) => {
         const display = getState().home.display;
         const outputQueue = getState().home.outputQueue;
 
-        if (display.length > 15) {
+        if (display.length > 15 || formula.length > 100) {
             return;
         }
 
@@ -199,7 +198,6 @@ const handleOperand = (value) => {
         precedence.hasOwnProperty(formula[formula.length - 2]) && formula[formula.length - 1] === "0" ?
         formula.slice(0, -1).concat(value) :
         formula.concat(value);
-
 
         const newQueue = precedence.hasOwnProperty(formula[formula.length - 1]) ?
             precedence.hasOwnProperty(formula[formula.length - 2]) ?
