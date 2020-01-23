@@ -10,7 +10,7 @@ const CalculatorComponent = (props) => {
                 <p id="display">{props.display}</p>
             </div>
             <CalculatorButton id="equals" text="=" handleClick={props.evaluate} />
-            <CalculatorButton id="zero" text="0" handleClick={props.handleZero}/>
+            <CalculatorButton id="zero" text="0" handleClick={props.handleOperand}/>
             <CalculatorButton id="one" text="1" handleClick={props.handleOperand}/>
             <CalculatorButton id="two" text="2" handleClick={props.handleOperand}/>
             <CalculatorButton id="three" text="3" handleClick={props.handleOperand}/>
@@ -24,7 +24,7 @@ const CalculatorComponent = (props) => {
             <CalculatorButton id="subtract" text="-" handleClick={props.handleOperator}/>
             <CalculatorButton id="multiply" text="*" handleClick={props.handleOperator}/>
             <CalculatorButton id="divide" text="/" handleClick={props.handleOperator}/>
-            <CalculatorButton id="decimal" text="." handleClick={props.handleDecimal}/>
+            <CalculatorButton id="decimal" text="." handleClick={props.handleOperand}/>
             <CalculatorButton id="clear" text="AC" handleClick={props.clear}/>
         </div>
     );

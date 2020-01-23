@@ -4,51 +4,37 @@ const INITIAL_STATE = {
     display: '0',
     formulaDisplay: '',
     outputQueue: [],
-    hasDecimal: false,
+    isNegativeNumber: false,
     evaluated: false,
     prevAns: ''
 };
 
 const homeReducer = (state=INITIAL_STATE, action) => {
     switch (action.type) {
-        case types.ZERO:
-            return Object.assign({}, state, {
-                display: action.display,
-                formulaDisplay: action.formula,
-                evaluated: false,
-                outputQueue: action.outputQueue
-            })
         case types.OPERATOR:
             return Object.assign({}, state, {
                     display: action.operator,
                     formulaDisplay: action.formula,
                     outputQueue: action.outputQueue,
                     evaluated: false,
-                    hasDecimal: false
+                    isNegativeNumber: false
                 });
         case types.OPERAND:
             return Object.assign({}, state, {
                 display: action.display,
                 formulaDisplay: action.formula,
                 evaluated: false,
-                outputQueue: action.outputQueue
+                outputQueue: action.outputQueue,
+                isNegativeNumber: action.isNegativeNumber
             });
         case types.EVALUATE:
             return Object.assign({}, state, {
                 display: action.output,
                 formulaDisplay: action.formula,
                 evaluated: true,
-                hasDecimal: false,
                 outputQueue: [action.output],
-                prevAns: action.output
-            });
-        case types.DECIMAL:
-            return Object.assign({}, state, {
-                hasDecimal: true,
-                display: action.display,
-                formulaDisplay: action.formula,
-                evaluated: false,
-                outputQueue: action.outputQueue
+                prevAns: action.output,
+                isNegativeNumber: false
             });
         case types.CLEAR:
             return INITIAL_STATE;

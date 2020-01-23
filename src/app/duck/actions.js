@@ -9,21 +9,13 @@ const handleOperator = (value, formula, outputQueue) => {
     };
 }
 
-const handleOperand = (display, formula, outputQueue) => {
+const handleOperand = (display, formula, outputQueue, isNegativeNumber) => {
     return {
         type: types.OPERAND,
         display: display,
         formula: formula,
-        outputQueue: outputQueue
-    };
-}
-
-const handleZero = (display, formula, outputQueue) => {
-    return {
-        type: types.ZERO,
-        formula: formula,
-        display: display,
-        outputQueue: outputQueue
+        outputQueue: outputQueue,
+        isNegativeNumber: isNegativeNumber
     };
 }
 
@@ -32,15 +24,6 @@ const evaluate = (output, formula) => {
         type: types.EVALUATE,
         output: output,
         formula: formula
-    };
-}
-
-const handleDecimal = (formula, display, outputQueue) => {
-    return {
-        type: types.DECIMAL,
-        formula: formula,
-        display: display,
-        outputQueue: outputQueue
     };
 }
 
@@ -53,8 +36,6 @@ const clear = () => {
 export default { 
     handleOperator,
     handleOperand,
-    handleZero,
-    handleDecimal,
     evaluate,
     clear
 };
